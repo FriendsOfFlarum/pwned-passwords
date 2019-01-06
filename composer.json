@@ -1,5 +1,5 @@
 {
-  "name": "reflar/pwnedpasswords",
+  "name": "reflar/pwned-passwords",
   "description": "Check passwords against the Have I Been Pwned password database",
   "type": "flarum-extension",
   "license": "MIT",

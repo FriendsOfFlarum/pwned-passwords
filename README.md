@@ -9,7 +9,7 @@ A Flarum extension that checks passwords against Have I Been Pwned's password da
 Use Bazaar or install it with Composer:
 
 ```
-composer require reflar/pwnedpasswords
+composer require reflar/pwned-passwords
 ```
 
 Then log in and enable the extension.
