@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of reflar/pwned-passwords.
+ *
+ * Copyright (c) 2019 ReFlar.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 namespace Reflar\PwnedPasswords\Middleware;
 
 use Flarum\Api\JsonApiResponse;
@@ -23,18 +32,18 @@ class Register implements MiddlewareInterface
             $client = new Guzzle();
             $sha1 = sha1($data['password']);
             $range = substr($sha1, 0, 5);
-            $response = $client->request('GET', 'https://api.pwnedpasswords.com/range/' . $range);
+            $response = $client->request('GET', 'https://api.pwnedpasswords.com/range/'.$range);
             $body = $response->getBody();
             $list = explode("\n", $body);
 
             foreach ($list as $line) {
                 $hash = strtolower(strtok($line, ':'));
 
-                if ($range . $hash === $sha1) {
+                if ($range.$hash === $sha1) {
                     $error = new ResponseBag('422', [
                         [
                             'status' => '422',
-                            'code' => 'validation_error',
+                            'code'   => 'validation_error',
                             'source' => [
                                 'pointer' => '/data/attributes/password',
                             ],
@@ -43,10 +52,12 @@ class Register implements MiddlewareInterface
                     ]);
                     $document = new Document();
                     $document->setErrors($error->getErrors());
+
                     return new JsonApiResponse($document, $error->getStatus());
                 }
             }
         }
+
         return $handler->handle($request);
     }
 }
