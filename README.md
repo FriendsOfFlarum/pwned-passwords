@@ -1,4 +1,6 @@
-# Pwned Passwords
+# Pwned Passwords by ReFlar
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ReFlar/pwned-passwords/blob/master/LICENSE)
 
 A Flarum extension that checks passwords against Have I Been Pwned's password database during registration to check for passwords seen in known data breaches.
 
@@ -7,15 +9,20 @@ A Flarum extension that checks passwords against Have I Been Pwned's password da
 Use Bazaar or install it with Composer:
 
 ```
-composer require reflar/pwnedpassword
+composer require reflar/pwnedpasswords
 ```
 
 Then log in and enable the extension.
 
+## To Do
+
+- Requests?
+
 ## Issues
 
-[Open an issue](https://github.com/ReFlar/PwnedPasswords/issues)
+- None known
 
 ## Links
 
-- [Packagist](https://packagist.org/p/reflar/pwnedpasswords)
+- [on GitHub](https://github.com/ReFlar/pwned-passwords)
+- [Issues](https://github.com/ReFlar/pwned-passwords/issues)
