@@ -27,7 +27,7 @@
       "title": "ReFlar Pwned Passwords",
       "icon": {
         "name": "fas fa-key",
-        "backgroundColor": "#ff0000",
+        "backgroundColor": "#263238",
         "color": "#fff"
       }
     }
