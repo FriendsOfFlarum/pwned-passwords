@@ -47,7 +47,7 @@ class Register implements MiddlewareInterface
                             'source' => [
                                 'pointer' => '/data/attributes/password',
                             ],
-                            'detail' => 'Your password is registered in the Have I Been Pwned database',
+                            'detail' => 'The password you chose has been found in past data breaches, please choose a different one',
                         ],
                     ]);
                     $document = new Document();
