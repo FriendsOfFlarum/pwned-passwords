@@ -20,7 +20,7 @@ Then log in and enable the extension.
 
 ## Issues
 
-- None known
+- [Open an issue on GitHub](https://github.com/pwned-passwords/issues)
 
 ## Links
 
