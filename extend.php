@@ -11,9 +11,11 @@
 
 namespace Reflar\PwnedPasswords;
 
+use Flarum\Extend\Locales;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return [
+    new Locales(__DIR__.'/locale'),
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddMiddleware::class);
     },

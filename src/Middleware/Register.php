@@ -40,6 +40,7 @@ class Register implements MiddlewareInterface
                 $hash = strtolower(strtok($line, ':'));
 
                 if ($range.$hash === $sha1) {
+                    $translator = app('translator');
                     $error = new ResponseBag('422', [
                         [
                             'status' => '422',
@@ -47,7 +48,7 @@ class Register implements MiddlewareInterface
                             'source' => [
                                 'pointer' => '/data/attributes/password',
                             ],
-                            'detail' => 'The password you chose is registered in the Have I Been Pwned database, please choose a different one',
+                            'detail' => $translator->trans('reflar-pwned-passwords.error'),
                         ],
                     ]);
                     $document = new Document();
