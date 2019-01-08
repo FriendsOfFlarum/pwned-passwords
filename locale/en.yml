@@ -1,2 +1,3 @@
 reflar-pwned-passwords:
-  error: The password you chose is registered in the Have I Been Pwned database, please choose a different one.
+  forum:
+    error: The password you chose is registered in the Have I Been Pwned database, please choose a different one.
