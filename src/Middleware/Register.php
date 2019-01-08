@@ -48,7 +48,7 @@ class Register implements MiddlewareInterface
                             'source' => [
                                 'pointer' => '/data/attributes/password',
                             ],
-                            'detail' => $translator->trans('reflar-pwned-passwords.forum.error'),
+                            'detail' => $translator->trans('reflar-pwned-passwords.error'),
                         ],
                     ]);
                     $document = new Document();
