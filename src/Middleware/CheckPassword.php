@@ -35,19 +35,19 @@ class CheckPassword implements MiddlewareInterface
                 $client = new Guzzle();
                 $sha1 = sha1($data['password']);
                 $range = substr($sha1, 0, 5);
-                $response = $client->request('GET', 'https://api.pwnedpasswords.com/range/' . $range);
+                $response = $client->request('GET', 'https://api.pwnedpasswords.com/range/'.$range);
                 $body = $response->getBody();
                 $list = explode("\n", $body);
 
                 foreach ($list as $line) {
                     $hash = strtolower(strtok($line, ':'));
 
-                    if ($range . $hash === $sha1) {
+                    if ($range.$hash === $sha1) {
                         $translator = app('translator');
                         $error = new ResponseBag('422', [
                             [
                                 'status' => '422',
-                                'code' => 'validation_error',
+                                'code'   => 'validation_error',
                                 'source' => [
                                     'pointer' => '/data/attributes/password',
                                 ],
