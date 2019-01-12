@@ -1,0 +1,2 @@
+reflar-pwned-passwords:
+  error: "A kiválasztott jelszó megtalálható a Have I Been Pwned adatbázisában. Kérlek, válassz másikat."
