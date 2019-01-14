@@ -1,0 +1,2 @@
+reflar-pwned-passwords:
+  error: Le mot de passe que vous avez choisi est présent dans la base de données de Have I Been Pwned, veuillez en choisir un autre.
