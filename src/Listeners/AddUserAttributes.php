@@ -11,19 +11,21 @@
 
 namespace Reflar\PwnedPasswords\Listeners;
 
-use Flarum\Event\ConfigureMiddleware;
+use Flarum\Api\Event\Serializing;
+use Flarum\Api\Serializer\UserSerializer;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\PwnedPasswords\Middleware\PreventPwnedPassword;
 
-class AddMiddleware
+class AddUserAttributes
 {
     public function subscribe(Dispatcher $events)
     {
-        $events->listen(ConfigureMiddleware::class, [$this, 'addMiddleware']);
+        $events->listen(Serializing::class, [$this, 'addAttributes']);
     }
 
-    public function addMiddleware(ConfigureMiddleware $event)
+    public function addAttributes(Serializing $event)
     {
-        $event->pipe(app(PreventPwnedPassword::class));
+        if ($event->isSerializer(UserSerializer::class)) {
+            $event->attributes['hasPwnedPassword'] = $event->model->has_pwned_password;
+        }
     }
 }
