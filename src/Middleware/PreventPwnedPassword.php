@@ -37,7 +37,7 @@ class PreventPwnedPassword implements MiddlewareInterface
                     $error = new ResponseBag('422', [
                         [
                             'status' => '422',
-                            'code' => 'validation_error',
+                            'code'   => 'validation_error',
                             'source' => [
                                 'pointer' => '/data/attributes/password',
                             ],

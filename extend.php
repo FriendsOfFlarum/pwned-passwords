@@ -15,9 +15,9 @@ use Flarum\Extend;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return [
-    new Extend\Locales(__DIR__ . '/locale'),
+    new Extend\Locales(__DIR__.'/locale'),
     (new Extend\Frontend('forum'))
-        ->js(__DIR__ . '/js/dist/forum.js'),
+        ->js(__DIR__.'/js/dist/forum.js'),
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddMiddleware::class);
         $events->subscribe(Listeners\AddUserAttributes::class);

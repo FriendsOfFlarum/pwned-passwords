@@ -31,6 +31,7 @@ class Password
                 return true;
             }
         }
+
         return false;
     }
 }
