@@ -57,10 +57,7 @@ export default function alertPwnedPassword(app) {
     ContainedAlert.component({
       dismissible: false,
       children: app.translator.trans(
-        'reflar-pwned-passwords.forum.alert.warning',
-        {
-          email: <strong>{user.email()}</strong>
-        }
+        'reflar-pwned-passwords.forum.alert.warning'
       ),
       controls: [resendButton]
     })
