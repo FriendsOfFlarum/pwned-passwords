@@ -21,7 +21,9 @@ return [
     function (Dispatcher $events) {
         $events->subscribe(Listeners\AddMiddleware::class);
         $events->subscribe(Listeners\AddUserAttributes::class);
+        $events->subscribe(Listeners\CheckPassword::class);
         $events->subscribe(Listeners\UnmarkPassword::class);
+        $events->subscribe(Listeners\RevokeAccessWhenPasswordPwned::class);
         $events->subscribe(Listeners\CheckPassword::class);
     },
 ];
