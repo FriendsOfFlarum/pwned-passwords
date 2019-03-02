@@ -11,7 +11,6 @@
 
 namespace Reflar\PwnedPasswords\Listeners;
 
-use Carbon\Carbon;
 use Flarum\Event\PrepareUserGroups;
 use Flarum\Group\Group;
 use Illuminate\Contracts\Events\Dispatcher;
