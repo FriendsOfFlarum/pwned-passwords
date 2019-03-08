@@ -1,2 +1,7 @@
 reflar-pwned-passwords:
   error: Le mot de passe que vous avez choisi est présent dans la base de données de Have I Been Pwned, veuillez en choisir un autre.
+  forum:
+    alert:
+      warning: Le mot de passe actuel de votre compte est enregistré dans la base de données Pwned Passwords. Nous vous avons envoyé un e-mail de réinitialisation du mot de passe.
+      resend_button: Renvoyer l'e-mail de réinitialisation du mot de passe
+      sent_message: Envoyer
