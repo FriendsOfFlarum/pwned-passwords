@@ -13,6 +13,7 @@ namespace Reflar\PwnedPasswords\Listeners;
 
 use Flarum\Event\ConfigureMiddleware;
 use Illuminate\Contracts\Events\Dispatcher;
+use Reflar\PwnedPasswords\Middleware\CheckLoginPassword;
 use Reflar\PwnedPasswords\Middleware\PreventPwnedPassword;
 
 class AddMiddleware
@@ -25,5 +26,6 @@ class AddMiddleware
     public function addMiddleware(ConfigureMiddleware $event)
     {
         $event->pipe(app(PreventPwnedPassword::class));
+        $event->pipe(app(CheckLoginPassword::class));
     }
 }
