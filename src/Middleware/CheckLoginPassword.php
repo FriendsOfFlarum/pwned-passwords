@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of fof/pwned-passwords.
+ * This file is part of reflar/pwned-passwords.
  *
- * Copyright (c) 2019 FriendsOfFlarum.
+ * Copyright (c) 2019 ReFlar.
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
@@ -13,12 +13,12 @@ namespace FoF\PwnedPasswords\Middleware;
 
 use Flarum\User\Command\RequestPasswordReset;
 use Flarum\User\User;
+use FoF\PwnedPasswords\Password;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use FoF\PwnedPasswords\Password;
 
 class CheckLoginPassword implements MiddlewareInterface
 {
