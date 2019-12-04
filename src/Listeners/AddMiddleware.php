@@ -1,21 +1,21 @@
 <?php
 
 /*
- * This file is part of reflar/pwned-passwords.
+ * This file is part of fof/pwned-passwords.
  *
- * Copyright (c) 2019 ReFlar.
+ * Copyright (c) 2019 FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Reflar\PwnedPasswords\Listeners;
+namespace FoF\PwnedPasswords\Listeners;
 
 use Flarum\Event\ConfigureMiddleware;
 use Illuminate\Contracts\Events\Dispatcher;
-use Reflar\PwnedPasswords\Middleware\CheckLoginPassword;
-use Reflar\PwnedPasswords\Middleware\CheckPasswordReset;
-use Reflar\PwnedPasswords\Middleware\PreventPwnedPassword;
+use FoF\PwnedPasswords\Middleware\CheckLoginPassword;
+use FoF\PwnedPasswords\Middleware\CheckPasswordReset;
+use FoF\PwnedPasswords\Middleware\PreventPwnedPassword;
 
 class AddMiddleware
 {

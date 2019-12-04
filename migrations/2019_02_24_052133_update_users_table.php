@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of reflar/pwned-passwords.
+ * This file is part of fof/pwned-passwords.
  *
- * Copyright (c) 2019 ReFlar.
+ * Copyright (c) 2019 FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.

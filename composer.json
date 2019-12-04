@@ -1,5 +1,8 @@
 {
-  "name": "reflar/pwned-passwords",
+  "name": "fof/pwned-passwords",
+  "replace": {
+    "reflar/pwned-passwords": "^0.1.0"
+  },
   "description": "Check passwords against the Have I Been Pwned password database",
   "type": "flarum-extension",
   "license": "MIT",
@@ -19,15 +22,15 @@
   },
   "autoload": {
     "psr-4": {
-      "Reflar\\PwnedPasswords\\": "src/"
+      "FoF\\PwnedPasswords\\": "src/"
     }
   },
   "extra": {
     "flarum-extension": {
-      "title": "ReFlar Pwned Passwords",
+      "title": "FriendsOfFlarum Pwned Passwords",
       "icon": {
         "name": "fas fa-key",
-        "backgroundColor": "#263238",
+        "backgroundColor": "#e74c3c",
         "color": "#fff"
       }
     }

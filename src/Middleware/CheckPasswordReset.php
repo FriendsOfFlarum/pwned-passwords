@@ -1,15 +1,15 @@
 <?php
 
 /*
- * This file is part of reflar/pwned-passwords.
+ * This file is part of fof/pwned-passwords.
  *
- * Copyright (c) 2019 ReFlar.
+ * Copyright (c) 2019 FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Reflar\PwnedPasswords\Middleware;
+namespace FoF\PwnedPasswords\Middleware;
 
 use Flarum\Http\UrlGenerator;
 use Flarum\User\PasswordToken;
@@ -18,7 +18,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Reflar\PwnedPasswords\Password;
+use FoF\PwnedPasswords\Password;
 use Zend\Diactoros\Response\RedirectResponse;
 use Zend\Diactoros\Uri;
 
@@ -40,7 +40,7 @@ class CheckPasswordReset implements MiddlewareInterface
                 $token = PasswordToken::findOrFail($data['passwordToken']);
                 if (Password::isPwned($data['password'])) {
                     $translator = app('translator');
-                    $request->getAttribute('session')->put('errors', new MessageBag([$translator->trans('reflar-pwned-passwords.error')]));
+                    $request->getAttribute('session')->put('errors', new MessageBag([$translator->trans('fof-pwned-passwords.error')]));
 
                     return new RedirectResponse($this->url->to('forum')->route('resetPassword', ['token' => $token->token]));
                 }

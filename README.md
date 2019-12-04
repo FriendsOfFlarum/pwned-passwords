@@ -1,29 +1,29 @@
-# Pwned Passwords by ReFlar
+# Pwned Passwords by FriendsOfFlarum
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ReFlar/pwned-passwords/blob/master/LICENSE) [![Latest Stable Version](https://img.shields.io/packagist/v/ReFlar/pwned-passwords.svg)](https://github.com/ReFlar/pwned-passwords)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/friendsofflarum/pwned-passwords/blob/master/LICENSE) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/pwned-passwords.svg)](https://github.com/friendsofflarum/pwned-passwords)
 
 A Flarum extension that checks passwords against Have I Been Pwned's password database during registration to check for passwords seen in known data breaches.
 
-## Installation
+### Installation
 
 Use Bazaar or install it with Composer:
 
 ```
-composer require reflar/pwned-passwords
+composer require fof/pwned-passwords
 ```
 
-Then log in and enable the extension.
+### Updating
 
-## To Do
+```
+composer update fof/pwned-passwords
+```
 
-- Requests?
+### Links
 
-## Issues
+[<img src="https://opencollective.com/fof/donate/button@2x.png?color=blue" height="25" />](https://opencollective.com/fof/donate)
 
-- [Open an issue on GitHub](https://github.com/pwned-passwords/issues)
+- [Packagist](https://packagist.org/packages/fof/pwned-passwords)
+- [GitHub](https://github.com/packages/FriendsOfFlarum/pwned-passwords)
+- [ReFlar's Pwned Passwords](https://packagist.org/packages/reflar/pwned-passwords)
 
-## Links
-
-- [on GitHub](https://github.com/ReFlar/pwned-passwords)
-- [Issues](https://github.com/ReFlar/pwned-passwords/issues)
-- [Packagist](https://packagist.org/packages/reflar/pwned-passwords)
+An extension by [FriendsOfFlarum](https://github.com/FriendsOfFlarum).

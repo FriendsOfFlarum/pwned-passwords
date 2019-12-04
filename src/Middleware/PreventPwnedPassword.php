@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of reflar/pwned-passwords.
+ * This file is part of fof/pwned-passwords.
  *
- * Copyright (c) 2019 ReFlar.
+ * Copyright (c) 2019 FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE.md
  * file that was distributed with this source code.
  */
 
-namespace Reflar\PwnedPasswords\Middleware;
+namespace FoF\PwnedPasswords\Middleware;
 
 use Flarum\Api\JsonApiResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Reflar\PwnedPasswords\Password;
+use FoF\PwnedPasswords\Password;
 use Tobscure\JsonApi\Document;
 use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 use Zend\Diactoros\Uri;
@@ -40,7 +40,7 @@ class PreventPwnedPassword implements MiddlewareInterface
                             'source' => [
                                 'pointer' => '/data/attributes/password',
                             ],
-                            'detail' => $translator->trans('reflar-pwned-passwords.error'),
+                            'detail' => $translator->trans('fof-pwned-passwords.error'),
                         ],
                     ]);
                     $document = new Document();

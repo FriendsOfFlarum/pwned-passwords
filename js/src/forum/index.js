@@ -5,10 +5,10 @@ import Model from 'flarum/Model';
 import User from 'flarum/models/User';
 import alertPwnedPassword from './alertPwnedPassword';
 
-app.initializers.add('reflar/pwned-passwords', () => {
-  User.prototype.hasPwnedPassword = Model.attribute('hasPwnedPassword');
+app.initializers.add('fof/pwned-passwords', () => {
+    User.prototype.hasPwnedPassword = Model.attribute('hasPwnedPassword');
 
-  extend(ForumApplication.prototype, 'mount', function() {
-    alertPwnedPassword(this);
-  });
+    extend(ForumApplication.prototype, 'mount', function() {
+        alertPwnedPassword(this);
+    });
 });
