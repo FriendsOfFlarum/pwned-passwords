@@ -24,14 +24,6 @@ class Password
         $body = $response->getBody();
         $list = explode("\n", $body);
 
-        foreach ($list as $line) {
-            $hash = strtolower(strtok($line, ':'));
-
-            if ($range.$hash === $sha1) {
-                return true;
-            }
-        }
-
-        return false;
+        return !!stripos($body, substr($sha1, 5));
     }
 }
