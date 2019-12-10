@@ -24,6 +24,6 @@ class Password
         $body = $response->getBody();
         $list = explode("\n", $body);
 
-        return !!stripos($body, substr($sha1, 5));
+        return (bool) stripos($body, substr($sha1, 5));
     }
 }

@@ -12,8 +12,8 @@
 namespace FoF\PwnedPasswords;
 
 use Flarum\Extend;
-use Illuminate\Contracts\Events\Dispatcher;
 use FoF\Components\Extend\AddFofComponents;
+use Illuminate\Contracts\Events\Dispatcher;
 
 return [
     new AddFofComponents(),
