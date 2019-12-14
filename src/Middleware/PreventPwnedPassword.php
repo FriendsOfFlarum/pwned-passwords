@@ -11,7 +11,6 @@
 
 namespace FoF\PwnedPasswords\Middleware;
 
-use Flarum\Api\JsonApiResponse;
 use Flarum\Foundation\ErrorHandling\JsonApiFormatter;
 use Flarum\Foundation\ErrorHandling\Registry;
 use Flarum\Foundation\ValidationException;
@@ -21,8 +20,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Tobscure\JsonApi\Document;
-use Tobscure\JsonApi\Exception\Handler\ResponseBag;
 use Zend\Diactoros\Uri;
 
 class PreventPwnedPassword implements MiddlewareInterface
