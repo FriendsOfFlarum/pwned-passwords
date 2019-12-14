@@ -16,6 +16,7 @@ use Flarum\User\Command\RequestPasswordReset;
 use Flarum\User\User;
 use FoF\PwnedPasswords\Password;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -23,6 +24,16 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CheckLoginPassword implements MiddlewareInterface
 {
+    /**
+     * @var Dispatcher
+     */
+    private $bus;
+
+    /**
+     * @var SettingsRepositoryInterface
+     */
+    private $settings;
+
     public function __construct(Dispatcher $bus, SettingsRepositoryInterface $settings)
     {
         $this->bus = $bus;
@@ -33,20 +44,18 @@ class CheckLoginPassword implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        if ($this->settings->get('fof-pwned-passwords.enableLoginCheck')) {
+        if ((bool) (int) $this->settings->get('fof-pwned-passwords.enableLoginCheck')) {
             $data = $request->getParsedBody();
             $path = $request->getUri()->getPath();
 
-            if ('POST' === $request->getMethod() && '/login' === $path) {
+            if ($request->getMethod() === 'POST' && $path === '/login') {
                 $session = $request->getAttribute('session');
                 $actor = User::find($session->get('user_id'));
 
-                if ($actor && Password::isPwned($data['password'])) {
-                    if (!$actor->has_pwned_password) {
-                        $this->bus->dispatch(new RequestPasswordReset($actor->email));
-                        $actor->has_pwned_password = true;
-                        $actor->save();
-                    }
+                if ($actor && Arr::has($data, 'password') && Password::isPwned($data['password']) && !$actor->has_pwned_password) {
+                    $this->bus->dispatch(new RequestPasswordReset($actor->email));
+                    $actor->has_pwned_password = true;
+                    $actor->save();
                 }
             }
         }

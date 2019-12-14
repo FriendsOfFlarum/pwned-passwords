@@ -14,6 +14,7 @@ namespace FoF\PwnedPasswords\Middleware;
 use Flarum\Http\UrlGenerator;
 use Flarum\User\PasswordToken;
 use FoF\PwnedPasswords\Password;
+use Illuminate\Support\Arr;
 use Illuminate\Support\MessageBag;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -24,6 +25,11 @@ use Zend\Diactoros\Uri;
 
 class CheckPasswordReset implements MiddlewareInterface
 {
+    /**
+     * @var UrlGenerator
+     */
+    private $url;
+
     public function __construct(UrlGenerator $url)
     {
         $this->url = $url;
@@ -35,15 +41,14 @@ class CheckPasswordReset implements MiddlewareInterface
         $uri = new Uri(app()->url('/reset'));
         $path = $request->getUri()->getPath();
 
-        if ('POST' === $request->getMethod()) {
-            if ($path === $uri->getPath()) {
-                $token = PasswordToken::findOrFail($data['passwordToken']);
-                if (Password::isPwned($data['password'])) {
-                    $translator = app('translator');
-                    $request->getAttribute('session')->put('errors', new MessageBag([$translator->trans('fof-pwned-passwords.error')]));
+        if ($request->getMethod() === 'POST' && $uri->getPath() === $path) {
+            $token = PasswordToken::findOrFail($data['passwordToken']);
 
-                    return new RedirectResponse($this->url->to('forum')->route('resetPassword', ['token' => $token->token]));
-                }
+            if (Arr::has($data, 'password') && Password::isPwned($data['password'])) {
+                $translator = app('translator');
+                $request->getAttribute('session')->put('errors', new MessageBag([$translator->trans('fof-pwned-passwords.error')]));
+
+                return new RedirectResponse($this->url->to('forum')->route('resetPassword', ['token' => $token->token]));
             }
         }
 

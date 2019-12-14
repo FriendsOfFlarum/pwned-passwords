@@ -12,7 +12,11 @@
 namespace FoF\PwnedPasswords\Middleware;
 
 use Flarum\Api\JsonApiResponse;
+use Flarum\Foundation\ErrorHandling\JsonApiFormatter;
+use Flarum\Foundation\ErrorHandling\Registry;
+use Flarum\Foundation\ValidationException;
 use FoF\PwnedPasswords\Password;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -29,26 +33,13 @@ class PreventPwnedPassword implements MiddlewareInterface
         $uri = new Uri(app()->url('/register'));
         $path = $request->getUri()->getPath();
 
-        if ('POST' === $request->getMethod()) {
-            if ($path === $uri->getPath()) {
-                if (Password::isPwned($data['password'])) {
-                    $translator = app('translator');
-                    $error = new ResponseBag('422', [
-                        [
-                            'status' => '422',
-                            'code'   => 'validation_error',
-                            'source' => [
-                                'pointer' => '/data/attributes/password',
-                            ],
-                            'detail' => $translator->trans('fof-pwned-passwords.error'),
-                        ],
-                    ]);
-                    $document = new Document();
-                    $document->setErrors($error->getErrors());
-
-                    return new JsonApiResponse($document, $error->getStatus());
-                }
-            }
+        if ($request->getMethod() === 'POST' && $uri->getPath() === $path && Arr::has($data, 'password') && Password::isPwned($data['password'])) {
+            return (new JsonApiFormatter())->format(
+                app(Registry::class)->handle(
+                    new ValidationException(['password' => app('translator')->trans('fof-pwned-passwords.error')])
+                ),
+                $request
+            );
         }
 
         return $handler->handle($request);

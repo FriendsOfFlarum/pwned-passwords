@@ -12,18 +12,22 @@
 namespace FoF\PwnedPasswords;
 
 use GuzzleHttp\Client as Guzzle;
+use Throwable;
 
 class Password
 {
     public static function isPwned(string $password)
     {
-        $client = new Guzzle();
-        $sha1 = sha1($password);
-        $range = substr($sha1, 0, 5);
-        $response = $client->request('GET', 'https://api.pwnedpasswords.com/range/'.$range);
-        $body = $response->getBody();
-        $list = explode("\n", $body);
+        try {
+            $client = new Guzzle();
+            $sha1 = sha1($password);
+            $range = substr($sha1, 0, 5);
+            $response = $client->request('GET', 'https://api.pwnedpasswords.com/range/'.$range);
+            $body = $response->getBody();
 
-        return (bool) stripos($body, substr($sha1, 5));
+            return (bool) stripos($body, substr($sha1, 5));
+        } catch (Throwable $ignored) {
+            return false;
+        }
     }
 }
