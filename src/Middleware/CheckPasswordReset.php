@@ -11,8 +11,10 @@
 
 namespace FoF\PwnedPasswords\Middleware;
 
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Flarum\Http\UrlGenerator;
 use Flarum\User\PasswordToken;
+use FoF\PwnedPasswords\Events\PwnedPasswordDetected;
 use FoF\PwnedPasswords\Password;
 use Illuminate\Support\Arr;
 use Illuminate\Support\MessageBag;
@@ -30,9 +32,15 @@ class CheckPasswordReset implements MiddlewareInterface
      */
     private $url;
 
-    public function __construct(UrlGenerator $url)
+    /**
+     * @var EventDispatcher
+     */
+    private $events;
+
+    public function __construct(UrlGenerator $url, EventDispatcher $events)
     {
         $this->url = $url;
+        $this->events = $events;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -47,6 +55,7 @@ class CheckPasswordReset implements MiddlewareInterface
             if (Arr::has($data, 'password') && Password::isPwned($data['password'])) {
                 $translator = app('translator');
                 $request->getAttribute('session')->put('errors', new MessageBag([$translator->trans('fof-pwned-passwords.error')]));
+                $this->events->dispatch(new PwnedPasswordDetected($token->user, 'passwordReset'));
 
                 return new RedirectResponse($this->url->to('forum')->route('resetPassword', ['token' => $token->token]));
             }

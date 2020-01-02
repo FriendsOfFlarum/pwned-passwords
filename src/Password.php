@@ -11,7 +11,6 @@
 
 namespace FoF\PwnedPasswords;
 
-use GuzzleHttp\Client as Guzzle;
 use Throwable;
 
 class Password
@@ -19,11 +18,9 @@ class Password
     public static function isPwned(string $password)
     {
         try {
-            $client = new Guzzle();
             $sha1 = sha1($password);
             $range = substr($sha1, 0, 5);
-            $response = $client->request('GET', 'https://api.pwnedpasswords.com/range/'.$range);
-            $body = $response->getBody();
+            $body = file_get_contents('https://api.pwnedpasswords.com/range/'.$range);
 
             return (bool) stripos($body, substr($sha1, 5));
         } catch (Throwable $ignored) {
