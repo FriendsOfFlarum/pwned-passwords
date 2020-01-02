@@ -11,11 +11,11 @@
 
 namespace FoF\PwnedPasswords\Middleware;
 
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Flarum\Http\UrlGenerator;
 use Flarum\User\PasswordToken;
 use FoF\PwnedPasswords\Events\PwnedPasswordDetected;
 use FoF\PwnedPasswords\Password;
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\MessageBag;
 use Psr\Http\Message\ResponseInterface;

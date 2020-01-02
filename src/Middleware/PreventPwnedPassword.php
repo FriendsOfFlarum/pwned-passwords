@@ -11,12 +11,12 @@
 
 namespace FoF\PwnedPasswords\Middleware;
 
-use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Flarum\Foundation\ErrorHandling\JsonApiFormatter;
 use Flarum\Foundation\ErrorHandling\Registry;
 use Flarum\Foundation\ValidationException;
 use FoF\PwnedPasswords\Events\PwnedPasswordDetected;
 use FoF\PwnedPasswords\Password;
+use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -44,6 +44,7 @@ class PreventPwnedPassword implements MiddlewareInterface
 
         if ($request->getMethod() === 'POST' && $uri->getPath() === $path && Arr::has($data, 'password') && Password::isPwned($data['password'])) {
             $this->events->dispatch(new PwnedPasswordDetected(null, 'registration'));
+
             return (new JsonApiFormatter())->format(
                 app(Registry::class)->handle(
                     new ValidationException(['password' => app('translator')->trans('fof-pwned-passwords.error')])
