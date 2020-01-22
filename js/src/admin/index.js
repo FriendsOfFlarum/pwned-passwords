@@ -11,6 +11,9 @@ app.initializers.add('fof/pwned-passwords', () => {
         items: [
             <BooleanItem key='fof-pwned-passwords.enableLoginCheck'>
                 <span>{app.translator.trans('fof-pwned-passwords.admin.enableLoginCheck')}</span>
+            </BooleanItem>,
+            <BooleanItem key='fof-pwned-passwords.revokeAdminAccess'>
+                <span>{app.translator.trans('fof-pwned-passwords.admin.enableAdminRevoke')}</span>
             </BooleanItem>
         ]
     }))
