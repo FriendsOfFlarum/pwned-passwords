@@ -22,10 +22,13 @@ return [
         ->js(__DIR__.'/js/dist/forum.js'),
     (new Extend\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js'),
+    (new Extend\Middleware('forum'))
+        ->add(Middleware\PreventPwnedPassword::class)
+        ->add(Middleware\CheckLoginPassword::class)
+        ->add(Middleware\CheckPasswordReset::class),
     function (Dispatcher $events) {
         $events->subscribe(Access\GlobalPolicy::class);
 
-        $events->subscribe(Listeners\AddMiddleware::class);
         $events->subscribe(Listeners\AddUserAttributes::class);
         $events->subscribe(Listeners\UnmarkPassword::class);
         $events->subscribe(Listeners\RevokeAccessWhenPasswordPwned::class);
