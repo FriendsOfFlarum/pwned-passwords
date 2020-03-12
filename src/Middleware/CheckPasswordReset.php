@@ -18,12 +18,12 @@ use FoF\PwnedPasswords\Password;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\MessageBag;
+use Laminas\Diactoros\Response\RedirectResponse;
+use Laminas\Diactoros\Uri;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Laminas\Diactoros\Response\RedirectResponse;
-use Laminas\Diactoros\Uri;
 
 class CheckPasswordReset implements MiddlewareInterface
 {
