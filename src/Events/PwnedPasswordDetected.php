@@ -22,7 +22,7 @@ class PwnedPasswordDetected
 
     public $type;
 
-    public function __construct(User $user = null, string $type)
+    public function __construct(User $user, string $type)
     {
         $this->user = $user;
         $this->type = $type;

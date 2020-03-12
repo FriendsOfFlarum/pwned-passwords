@@ -22,7 +22,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Zend\Diactoros\Uri;
+use Laminas\Diactoros\Uri;
 
 class PreventPwnedPassword implements MiddlewareInterface
 {
@@ -43,7 +43,8 @@ class PreventPwnedPassword implements MiddlewareInterface
         $path = $request->getUri()->getPath();
 
         if ($request->getMethod() === 'POST' && $uri->getPath() === $path && Arr::has($data, 'password') && Password::isPwned($data['password'])) {
-            $this->events->dispatch(new PwnedPasswordDetected(null, 'registration'));
+            $actor = $request->getAttribute('actor');
+            $this->events->dispatch(new PwnedPasswordDetected($actor, 'registration'));
 
             return (new JsonApiFormatter())->format(
                 app(Registry::class)->handle(
