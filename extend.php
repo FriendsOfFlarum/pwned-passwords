@@ -17,15 +17,23 @@ use Illuminate\Contracts\Events\Dispatcher;
 
 return [
     new AddFofComponents(),
+
     new Extend\Locales(__DIR__.'/locale'),
+
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js'),
+
     (new Extend\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js'),
+
     (new Extend\Middleware('forum'))
         ->add(Middleware\PreventPwnedPassword::class)
         ->add(Middleware\CheckLoginPassword::class)
         ->add(Middleware\CheckPasswordReset::class),
+
+    (new Extend\User())
+,
+
     function (Dispatcher $events) {
         $events->subscribe(Access\GlobalPolicy::class);
 

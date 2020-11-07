@@ -14,6 +14,7 @@ namespace FoF\PwnedPasswords\Middleware;
 use Flarum\Foundation\ErrorHandling\JsonApiFormatter;
 use Flarum\Foundation\ErrorHandling\Registry;
 use Flarum\Foundation\ValidationException;
+use Flarum\Http\UrlGenerator;
 use FoF\PwnedPasswords\Events\PwnedPasswordDetected;
 use FoF\PwnedPasswords\Password;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
@@ -31,15 +32,21 @@ class PreventPwnedPassword implements MiddlewareInterface
      */
     private $events;
 
-    public function __construct(EventDispatcher $events)
+    /**
+     * @var UrlGenerator
+     */
+    private $url;
+
+    public function __construct(EventDispatcher $events, UrlGenerator $url)
     {
         $this->events = $events;
+        $this->url = $url;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $data = $request->getParsedBody();
-        $uri = new Uri(app()->url('/register'));
+        $uri = new Uri($this->url->to('forum')->path('/register'));
         $path = $request->getUri()->getPath();
 
         if ($request->getMethod() === 'POST' && $uri->getPath() === $path && Arr::has($data, 'password') && Password::isPwned($data['password'])) {

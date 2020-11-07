@@ -8,51 +8,49 @@ export default function alertPwnedPassword(app) {
     if (!user || !user.hasPwnedPassword()) return;
     if (!user.isEmailConfirmed()) return;
 
-    const resendButton = Button.component({
-        className: 'Button Button--link',
-        children: app.translator.trans('fof-pwned-passwords.forum.alert.resend_button'),
-        onclick: function() {
-            resendButton.props.loading = true;
-            m.redraw();
+    const resendButton = Button.component(
+        {
+            className: 'Button Button--link',
+            onclick: function() {
+                resendButton.props.loading = true;
+                m.redraw();
 
-            app.request({
-                method: 'POST',
-                url: app.forum.attribute('apiUrl') + '/forgot',
-                data: { email: user.email() },
-            })
-                .then(() => {
-                    resendButton.props.loading = false;
-                    resendButton.props.children = [
-                        icon('fas fa-check'),
-                        ' ',
-                        app.translator.trans('fof-pwned-passwords.forum.alert.sent_message'),
-                    ];
-                    resendButton.props.disabled = true;
-                    m.redraw();
+                app.request({
+                    method: 'POST',
+                    url: app.forum.attribute('apiUrl') + '/forgot',
+                    data: { email: user.email() },
                 })
-                .catch(() => {
-                    resendButton.props.loading = false;
-                    m.redraw();
-                });
+                    .then(() => {
+                        resendButton.props.loading = false;
+                        resendButton.props.children = [
+                            icon('fas fa-check'),
+                            ' ',
+                            app.translator.trans('fof-pwned-passwords.forum.alert.sent_message'),
+                        ];
+                        resendButton.props.disabled = true;
+                        m.redraw();
+                    })
+                    .catch(() => {
+                        resendButton.props.loading = false;
+                        m.redraw();
+                    });
+            },
         },
-    });
+        app.translator.trans('fof-pwned-passwords.forum.alert.resend_button')
+    );
 
     class ContainedAlert extends Alert {
-        view() {
-            const vdom = super.view();
-
-            vdom.children = [<div className="container">{vdom.children}</div>];
-
-            return vdom;
+        view(vnode) {
+            const vdom = super.view(vnode);
+            return { ...vdom, children: [<div className="container">{vdom.children}</div>] };
         }
     }
 
-    m.mount(
-        $('<div/>').insertBefore('#content')[0],
-        ContainedAlert.component({
-            dismissible: false,
-            children: app.translator.trans('fof-pwned-passwords.forum.alert.warning'),
-            controls: [resendButton],
-        })
-    );
+    m.mount($('<div/>').insertBefore('#content')[0], {
+        view: () => (
+            <ContainedAlert dismissible={false} controls={[<resendButton />]}>
+                {app.translator.trans('fof-pwned-passwords.forum.alert.warning')}
+            </ContainedAlert>
+        ),
+    });
 }

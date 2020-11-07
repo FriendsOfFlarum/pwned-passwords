@@ -11,6 +11,7 @@
 
 namespace FoF\PwnedPasswords;
 
+use Flarum\Foundation\Application;
 use GuzzleHttp\Client as Guzzle;
 use Throwable;
 
@@ -19,7 +20,7 @@ class Password
     public static function isPwned(string $password)
     {
         try {
-            $client = new Guzzle();
+            $client = new Guzzle(['verify' => !app(Application::class)->inDebugMode()]);
             $sha1 = sha1($password);
             $range = substr($sha1, 0, 5);
             $response = $client->request('GET', 'https://api.pwnedpasswords.com/range/'.$range);

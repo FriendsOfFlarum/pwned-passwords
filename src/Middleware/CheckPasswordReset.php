@@ -46,7 +46,7 @@ class CheckPasswordReset implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $data = $request->getParsedBody();
-        $uri = new Uri(app()->url('/reset'));
+        $uri = new Uri($this->url->to('forum')->path('/reset'));
         $path = $request->getUri()->getPath();
 
         if ($request->getMethod() === 'POST' && $uri->getPath() === $path) {
