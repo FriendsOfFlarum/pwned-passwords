@@ -31,8 +31,6 @@ return [
         ->add(Middleware\CheckLoginPassword::class)
         ->add(Middleware\CheckPasswordReset::class),
 
-    (new Extend\User()),
-
     function (Dispatcher $events) {
         $events->subscribe(Access\GlobalPolicy::class);
 
