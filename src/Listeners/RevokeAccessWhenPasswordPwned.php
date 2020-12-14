@@ -11,10 +11,8 @@
 
 namespace FoF\PwnedPasswords\Listeners;
 
-use Flarum\Event\PrepareUserGroups;
 use Flarum\Group\Group;
 use Flarum\User\User;
-use Illuminate\Contracts\Events\Dispatcher;
 
 class RevokeAccessWhenPasswordPwned
 {

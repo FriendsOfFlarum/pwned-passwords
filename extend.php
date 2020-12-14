@@ -13,11 +13,9 @@ namespace FoF\PwnedPasswords;
 
 use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Extend;
-use Flarum\Group\Group;
 use Flarum\User\Event\PasswordChanged;
 use Flarum\User\User;
 use FoF\PwnedPasswords\Listeners\UnmarkPassword;
-use Illuminate\Contracts\Events\Dispatcher;
 
 return [
     new Extend\Locales(__DIR__.'/locale'),

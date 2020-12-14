@@ -11,11 +11,9 @@
 
 namespace FoF\PwnedPasswords\Access;
 
-use Flarum\Event\GetPermission;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Access\AbstractPolicy;
 use Flarum\User\User;
-use Illuminate\Contracts\Events\Dispatcher;
 
 class GlobalPolicy extends AbstractPolicy
 {

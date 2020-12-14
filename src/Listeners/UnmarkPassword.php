@@ -12,7 +12,6 @@
 namespace FoF\PwnedPasswords\Listeners;
 
 use Flarum\User\Event\PasswordChanged;
-use Illuminate\Events\Dispatcher;
 
 class UnmarkPassword
 {
