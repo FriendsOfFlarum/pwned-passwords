@@ -16,12 +16,7 @@ use Illuminate\Events\Dispatcher;
 
 class UnmarkPassword
 {
-    public function subscribe(Dispatcher $events)
-    {
-        $events->listen(PasswordChanged::class, [$this, 'unmarkPassword']);
-    }
-
-    public function unmarkPassword(PasswordChanged $event)
+    public function handle(PasswordChanged $event)
     {
         $user = $event->user;
         $user->has_pwned_password = false;

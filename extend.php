@@ -11,13 +11,15 @@
 
 namespace FoF\PwnedPasswords;
 
+use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Extend;
-use FoF\Components\Extend\AddFofComponents;
+use Flarum\Group\Group;
+use Flarum\User\Event\PasswordChanged;
+use Flarum\User\User;
+use FoF\PwnedPasswords\Listeners\UnmarkPassword;
 use Illuminate\Contracts\Events\Dispatcher;
 
 return [
-    new AddFofComponents(),
-
     new Extend\Locales(__DIR__.'/locale'),
 
     (new Extend\Frontend('forum'))
@@ -31,11 +33,17 @@ return [
         ->add(Middleware\CheckLoginPassword::class)
         ->add(Middleware\CheckPasswordReset::class),
 
-    function (Dispatcher $events) {
-        $events->subscribe(Access\GlobalPolicy::class);
+    (new Extend\Event())
+        ->listen(PasswordChanged::class, UnmarkPassword::class),
 
-        $events->subscribe(Listeners\AddUserAttributes::class);
-        $events->subscribe(Listeners\UnmarkPassword::class);
-        $events->subscribe(Listeners\RevokeAccessWhenPasswordPwned::class);
-    },
+    (new Extend\ApiSerializer(UserSerializer::class))
+        ->attribute('hasPwnedPassword', function (UserSerializer $serializer, User $user) {
+            return $user->has_pwned_password;
+        }),
+
+    (new Extend\User())
+        ->permissionGroups(Listeners\RevokeAccessWhenPasswordPwned::class),
+
+    (new Extend\Policy())
+        ->globalPolicy(Access\GlobalPolicy::class),
 ];

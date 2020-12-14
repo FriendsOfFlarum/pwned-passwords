@@ -13,19 +13,17 @@ namespace FoF\PwnedPasswords\Listeners;
 
 use Flarum\Event\PrepareUserGroups;
 use Flarum\Group\Group;
+use Flarum\User\User;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class RevokeAccessWhenPasswordPwned
 {
-    public function subscribe(Dispatcher $events)
+    public function __invoke(User $user, array $groupIds): array
     {
-        $events->listen(PrepareUserGroups::class, [$this, 'prepareUserGroups']);
-    }
-
-    public function prepareUserGroups(PrepareUserGroups $event)
-    {
-        if ($event->user->has_pwned_password) {
-            $event->groupIds = [Group::GUEST_ID];
+        if ($user->has_pwned_password) {
+            $groupIds = [Group::GUEST_ID];
         }
+
+        return $groupIds;
     }
 }
