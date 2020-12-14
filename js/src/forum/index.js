@@ -8,7 +8,7 @@ import alertPwnedPassword from './alertPwnedPassword';
 app.initializers.add('fof/pwned-passwords', () => {
     User.prototype.hasPwnedPassword = Model.attribute('hasPwnedPassword');
 
-    extend(ForumApplication.prototype, 'mount', function() {
+    extend(ForumApplication.prototype, 'mount', function () {
         alertPwnedPassword(this);
     });
 });

@@ -11,7 +11,7 @@ export default function alertPwnedPassword(app) {
     const resendButton = Button.component(
         {
             className: 'Button Button--link',
-            onclick: function() {
+            onclick: function () {
                 resendButton.props.loading = true;
                 m.redraw();
 
