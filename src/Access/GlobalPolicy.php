@@ -11,11 +11,11 @@
 
 namespace FoF\PwnedPasswords\Access;
 
-use Flarum\Event\GetPermission;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Illuminate\Contracts\Events\Dispatcher;
+use Flarum\User\Access\AbstractPolicy;
+use Flarum\User\User;
 
-class GlobalPolicy
+class GlobalPolicy extends AbstractPolicy
 {
     /**
      * @var SettingsRepositoryInterface
@@ -27,15 +27,10 @@ class GlobalPolicy
         $this->settings = $settings;
     }
 
-    public function subscribe(Dispatcher $events)
+    public function can(User $actor)
     {
-        $events->listen(GetPermission::class, [$this, 'configureGlobalPermissions']);
-    }
-
-    public function configureGlobalPermissions(GetPermission $event)
-    {
-        if ((bool) (int) $this->settings->get('fof-pwned-passwords.revokeAdminAccess') && (bool) $event->actor->has_pwned_password && $event->actor->isAdmin()) {
-            return false;
+        if ((bool) (int) $this->settings->get('fof-pwned-passwords.revokeAdminAccess') && (bool) $actor->has_pwned_password && $actor->isAdmin()) {
+            return $this->deny();
         }
     }
 }

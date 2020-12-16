@@ -24,6 +24,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class PreventPwnedPassword implements MiddlewareInterface
 {
@@ -37,7 +38,12 @@ class PreventPwnedPassword implements MiddlewareInterface
      */
     private $url;
 
-    public function __construct(EventDispatcher $events, UrlGenerator $url)
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    public function __construct(EventDispatcher $events, UrlGenerator $url, TranslatorInterface $translator)
     {
         $this->events = $events;
         $this->url = $url;
@@ -55,7 +61,7 @@ class PreventPwnedPassword implements MiddlewareInterface
 
             return (new JsonApiFormatter())->format(
                 app(Registry::class)->handle(
-                    new ValidationException(['password' => app('translator')->trans('fof-pwned-passwords.error')])
+                    new ValidationException(['password' => $this->translator->trans('fof-pwned-passwords.error')])
                 ),
                 $request
             );

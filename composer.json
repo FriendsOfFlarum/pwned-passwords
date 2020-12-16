@@ -1,42 +1,54 @@
 {
-  "name": "fof/pwned-passwords",
-  "description": "Check passwords against the Have I Been Pwned password database",
-  "type": "flarum-extension",
-  "license": "MIT",
-  "keywords": [
-    "flarum"
-  ],
-  "authors": [
-    {
-      "name": "Tristian Kelly",
-      "email": "tristian.kelly560@gmail.com",
-      "role": "Developer"
-    }
-  ],
-  "require": {
-    "flarum/core": ">=0.1.0-beta.14 <0.1.0-beta.15",
-    "fof/components": ">=0.2.0",
-    "guzzlehttp/guzzle": "6.* || 7.*"
-  },
-  "replace": {
-    "reflar/pwned-passwords": "*"
-  },
-  "autoload": {
-    "psr-4": {
-      "FoF\\PwnedPasswords\\": "src/"
-    }
-  },
-  "extra": {
-    "flarum-extension": {
-      "title": "FoF Pwned Passwords",
-      "icon": {
-        "name": "fas fa-key",
-        "backgroundColor": "#e74c3c",
-        "color": "#fff"
-      }
+    "name": "fof/pwned-passwords",
+    "description": "Check passwords against the Have I Been Pwned password database",
+    "type": "flarum-extension",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/FriendsOfFlarum/pwned-passwords/issues",
+        "source": "https://github.com/FriendsOfFlarum/pwned-passwords",
+        "forum": "https://discuss.flarum.org/d/18348"
     },
-    "flagrow": {
-      "discuss": "https://discuss.flarum.org/d/18348"
+    "homepage": "https://friendsofflarum.org",
+    "funding": [
+        {
+            "type": "website",
+            "url": "https://opencollective.com/fof/donate"
+        }
+    ],
+    "keywords": [
+        "flarum"
+    ],
+    "authors": [
+        {
+            "name": "Tristian Kelly",
+            "email": "tristian.kelly560@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "flarum/core": "^0.1.0-beta.15",
+        "guzzlehttp/guzzle": "6.* || 7.*"
+    },
+    "replace": {
+        "reflar/pwned-passwords": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "FoF\\PwnedPasswords\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "FoF Pwned Passwords",
+            "category": "feature",
+            "icon": {
+                "name": "fas fa-key",
+                "backgroundColor": "#e74c3c",
+                "color": "#fff"
+            }
+        },
+        "flagrow": {
+            "discuss": "https://discuss.flarum.org/d/18348"
+        }
     }
-  }
 }
