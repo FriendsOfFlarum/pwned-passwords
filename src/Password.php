@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/pwned-passwords.
  *
- * Copyright (c) 2019 FriendsOfFlarum.
+ * Copyright (c) 2019-2021 FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@ class Password
     public static function isPwned(string $password)
     {
         try {
-            $client = new Guzzle(['verify' => !app(Application::class)->inDebugMode()]);
+            $client = new Guzzle(['verify' => !resolve(Application::class)->inDebugMode()]);
             $sha1 = sha1($password);
             $range = substr($sha1, 0, 5);
             $response = $client->request('GET', 'https://api.pwnedpasswords.com/range/'.$range);

@@ -1,8 +1,8 @@
 import app from 'flarum/app';
-import { extend } from 'flarum/extend';
-import ForumApplication from 'flarum/ForumApplication';
-import Model from 'flarum/Model';
-import User from 'flarum/models/User';
+import { extend } from 'flarum/common/extend';
+import ForumApplication from 'flarum/forum/ForumApplication';
+import Model from 'flarum/common/Model';
+import User from 'flarum/common/models/User';
 import alertPwnedPassword from './alertPwnedPassword';
 
 app.initializers.add('fof/pwned-passwords', () => {

@@ -6,14 +6,14 @@ A Flarum extension that checks passwords against Have I Been Pwned's password da
 
 ### Installation
 
-Use Bazaar or install it with Composer:
-
+Using composer:
 ```
 composer require fof/pwned-passwords
 ```
 
 ### Updating
 
+Using composer:
 ```
 composer update fof/pwned-passwords
 ```

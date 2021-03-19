@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/pwned-passwords.
  *
- * Copyright (c) 2019 FriendsOfFlarum.
+ * Copyright (c) 2019-2021 FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,7 +24,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PreventPwnedPassword implements MiddlewareInterface
 {
@@ -61,7 +61,7 @@ class PreventPwnedPassword implements MiddlewareInterface
             $this->events->dispatch(new PwnedPasswordDetected($actor, 'registration'));
 
             return (new JsonApiFormatter())->format(
-                app(Registry::class)->handle(
+                resolve(Registry::class)->handle(
                     new ValidationException(['password' => $this->translator->trans('fof-pwned-passwords.error')])
                 ),
                 $request

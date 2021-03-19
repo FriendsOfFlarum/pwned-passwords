@@ -1,6 +1,6 @@
-import Alert from 'flarum/components/Alert';
-import Button from 'flarum/components/Button';
-import icon from 'flarum/helpers/icon';
+import Alert from 'flarum/common/components/Alert';
+import Button from 'flarum/common/components/Button';
+import icon from 'flarum/common/helpers/icon';
 
 export default function alertPwnedPassword(app) {
     const user = app.session.user;
