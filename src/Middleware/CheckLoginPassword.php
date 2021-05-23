@@ -3,7 +3,7 @@
 /*
  * This file is part of fof/pwned-passwords.
  *
- * Copyright (c) 2019 - 2021 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -58,7 +58,7 @@ class CheckLoginPassword implements MiddlewareInterface
             $data = $request->getParsedBody();
             $path = $request->getUri()->getPath();
 
-            if ('POST' === $request->getMethod() && Str::endsWith($path, '/login') ) {
+            if ('POST' === $request->getMethod() && Str::endsWith($path, '/login')) {
                 $token = Arr::get($response->getPayload(), 'token');
                 $user_id = AccessToken::where('token', $token)->get()->pluck('user_id');
                 $actor = User::find($user_id)->first();
