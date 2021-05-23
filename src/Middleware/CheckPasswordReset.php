@@ -53,7 +53,7 @@ class CheckPasswordReset implements MiddlewareInterface
             $token = PasswordToken::findOrFail($data['passwordToken']);
 
             if (Arr::has($data, 'password') && Password::isPwned($data['password'])) {
-                $translator = app('translator');
+                $translator = resolve('translator');
                 $request->getAttribute('session')->put('errors', new MessageBag([$translator->trans('fof-pwned-passwords.error')]));
                 $this->events->dispatch(new PwnedPasswordDetected($token->user, 'passwordReset'));
 

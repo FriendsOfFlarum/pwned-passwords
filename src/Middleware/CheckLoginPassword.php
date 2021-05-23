@@ -11,6 +11,7 @@
 
 namespace FoF\PwnedPasswords\Middleware;
 
+use Flarum\Http\AccessToken;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Command\RequestPasswordReset;
 use Flarum\User\User;
@@ -19,6 +20,7 @@ use FoF\PwnedPasswords\Password;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -56,9 +58,10 @@ class CheckLoginPassword implements MiddlewareInterface
             $data = $request->getParsedBody();
             $path = $request->getUri()->getPath();
 
-            if ('POST' === $request->getMethod() && '/login' === $path) {
-                $session = $request->getAttribute('session');
-                $actor = User::find($session->get('user_id'));
+            if ('POST' === $request->getMethod() && Str::endsWith($path, '/login') ) {
+                $token = Arr::get($response->getPayload(), 'token');
+                $user_id = AccessToken::where('token', $token)->get()->pluck('user_id');
+                $actor = User::find($user_id)->first();
 
                 if ($actor && Arr::has($data, 'password') && Password::isPwned($data['password']) && !$actor->has_pwned_password) {
                     $this->bus->dispatch(new RequestPasswordReset($actor->email));
