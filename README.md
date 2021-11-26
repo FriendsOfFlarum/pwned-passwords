@@ -8,7 +8,7 @@ A Flarum extension that checks passwords against Have I Been Pwned's password da
 
 Using composer:
 ```
-composer require fof/pwned-passwords
+composer require fof/pwned-passwords:"*"
 ```
 
 ### Updating
