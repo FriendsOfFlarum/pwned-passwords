@@ -29,8 +29,8 @@ class GlobalPolicy extends AbstractPolicy
 
     public function can(User $actor)
     {
-        if ((bool) (int) $this->settings->get('fof-pwned-passwords.revokeAdminAccess') && (bool) $actor->has_pwned_password && $actor->isAdmin()) {
-            return $this->deny();
+        if ($this->settings->get('fof-pwned-passwords.revokeAdminAccess') && $actor->has_pwned_password && $actor->isAdmin()) {
+            return $this->forceDeny();
         }
     }
 }
