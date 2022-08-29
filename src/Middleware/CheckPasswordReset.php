@@ -19,7 +19,6 @@ use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\MessageBag;
 use Laminas\Diactoros\Response\RedirectResponse;
-use Laminas\Diactoros\Uri;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -45,12 +44,9 @@ class CheckPasswordReset implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $data = $request->getParsedBody();
-        $uri = new Uri($this->url->to('forum')->path('/reset'));
-        $path = $request->getUri()->getPath();
-
-        if ($request->getMethod() === 'POST' && $uri->getPath() === $path) {
-            $token = PasswordToken::findOrFail($data['passwordToken']);
+        if ($request->getAttribute('routeName') === 'savePassword') {
+            $data = $request->getParsedBody();
+            $token = PasswordToken::findOrFail(Arr::get($data, 'passwordToken'));
 
             if (Arr::has($data, 'password') && Password::isPwned($data['password'])) {
                 $translator = resolve('translator');

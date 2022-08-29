@@ -14,13 +14,12 @@ namespace FoF\PwnedPasswords\Middleware;
 use Flarum\Http\AccessToken;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Command\RequestPasswordReset;
-use Flarum\User\User;
 use FoF\PwnedPasswords\Events\PwnedPasswordDetected;
 use FoF\PwnedPasswords\Password;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -54,22 +53,27 @@ class CheckLoginPassword implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        if ((bool) (int) $this->settings->get('fof-pwned-passwords.enableLoginCheck')) {
-            $data = $request->getParsedBody();
-            $path = $request->getUri()->getPath();
+        if ($request->getAttribute('routeName') !== 'login') {
+            return $response;
+        }
 
-            if ('POST' === $request->getMethod() && Str::endsWith($path, '/login')) {
-                $token = Arr::get($response->getPayload(), 'token');
-                $user_id = AccessToken::where('token', $token)->get()->pluck('user_id');
-                $actor = User::find($user_id)->first();
+        if ($response->getStatusCode() !== 200 || !($response instanceof JsonResponse)) {
+            return $response;
+        }
 
-                if ($actor && Arr::has($data, 'password') && Password::isPwned($data['password']) && !$actor->has_pwned_password) {
-                    $this->bus->dispatch(new RequestPasswordReset($actor->email));
-                    $actor->has_pwned_password = true;
-                    $actor->save();
-                    $this->events->dispatch(new PwnedPasswordDetected($actor, 'login'));
-                }
-            }
+        if (!$this->settings->get('fof-pwned-passwords.enableLoginCheck')) {
+            return $response;
+        }
+
+        $data = $request->getParsedBody();
+        $token = AccessToken::findValid(Arr::get($response->getPayload(), 'token'));
+        $actor = $token->user;
+
+        if ($actor && !$actor->has_pwned_password && Arr::has($data, 'password') && Password::isPwned($data['password'])) {
+            $this->bus->dispatch(new RequestPasswordReset($actor->email));
+            $actor->has_pwned_password = true;
+            $actor->save();
+            $this->events->dispatch(new PwnedPasswordDetected($actor, 'login'));
         }
 
         return $response;

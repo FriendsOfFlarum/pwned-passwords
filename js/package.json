@@ -4,11 +4,11 @@
     "private": true,
     "prettier": "@flarum/prettier-config",
     "dependencies": {
-        "@flarum/prettier-config": "^1.0.0",
-        "flarum-tsconfig": "^1.0.2",
-        "flarum-webpack-config": "^1.0.0",
-        "webpack": "^4.44.2",
-        "webpack-cli": "^4.9.1"
+        "@flarum/prettier-config": "^1.0",
+        "flarum-tsconfig": "^1.0",
+        "flarum-webpack-config": "^2.0",
+        "webpack": "^5.65",
+        "webpack-cli": "^4.9"
     },
     "devDependencies": {
         "prettier": "^2.4.1"
