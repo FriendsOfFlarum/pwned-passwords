@@ -49,6 +49,11 @@
         },
         "flagrow": {
             "discuss": "https://discuss.flarum.org/d/18348"
+        },
+        "flarum-cli": {
+            "modules": {
+                "githubActions": true
+            }
         }
     }
 }
