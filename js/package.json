@@ -7,11 +7,11 @@
         "@flarum/prettier-config": "^1.0",
         "flarum-tsconfig": "^1.0",
         "flarum-webpack-config": "^2.0",
-        "webpack": "^5.76",
-        "webpack-cli": "^4.9"
+        "webpack": "^5.88.2",
+        "webpack-cli": "^5.1.4"
     },
     "devDependencies": {
-        "prettier": "^2.4.1"
+        "prettier": "^3.0.3"
     },
     "scripts": {
         "dev": "webpack --mode development --watch",
