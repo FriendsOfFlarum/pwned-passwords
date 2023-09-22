@@ -13,11 +13,11 @@ namespace FoF\PwnedPasswords\Middleware;
 
 use Flarum\Http\AccessToken;
 use Flarum\Settings\SettingsRepositoryInterface;
-use Flarum\User\Command\RequestPasswordReset;
+use Flarum\User\Job\RequestPasswordResetJob;
 use FoF\PwnedPasswords\Events\PwnedPasswordDetected;
 use FoF\PwnedPasswords\Password;
-use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
+use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Support\Arr;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -28,11 +28,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 class CheckLoginPassword implements MiddlewareInterface
 {
     /**
-     * @var Dispatcher
-     */
-    private $bus;
-
-    /**
      * @var SettingsRepositoryInterface
      */
     private $settings;
@@ -42,11 +37,16 @@ class CheckLoginPassword implements MiddlewareInterface
      */
     private $events;
 
-    public function __construct(Dispatcher $bus, SettingsRepositoryInterface $settings, EventDispatcher $events)
+    /**
+     * @var Queue
+     */
+    private $queue;
+
+    public function __construct(SettingsRepositoryInterface $settings, EventDispatcher $events, Queue $queue)
     {
-        $this->bus = $bus;
         $this->settings = $settings;
         $this->events = $events;
+        $this->queue = $queue;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -70,7 +70,7 @@ class CheckLoginPassword implements MiddlewareInterface
         $actor = $token->user;
 
         if ($actor && !$actor->has_pwned_password && Arr::has($data, 'password') && Password::isPwned($data['password'])) {
-            $this->bus->dispatch(new RequestPasswordReset($actor->email));
+            $this->queue->push(new RequestPasswordResetJob($actor->email));
             $actor->has_pwned_password = true;
             $actor->save();
             $this->events->dispatch(new PwnedPasswordDetected($actor, 'login'));
