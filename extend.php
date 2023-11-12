@@ -26,7 +26,6 @@ return [
     (new Extend\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js'),
 
-
     (new Extend\Model(User::class))
         ->cast('has_pwned_password', 'bool'),
 
