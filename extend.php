@@ -26,6 +26,10 @@ return [
     (new Extend\Frontend('admin'))
         ->js(__DIR__.'/js/dist/admin.js'),
 
+
+    (new Extend\Model(User::class))
+        ->cast('has_pwned_password', 'bool'),
+
     (new Extend\Middleware('forum'))
         ->add(Middleware\PreventPwnedPassword::class)
         ->add(Middleware\CheckLoginPassword::class)
