@@ -15,16 +15,8 @@ use Flarum\User\User;
 
 class PwnedPasswordDetected
 {
-    /**
-     * @var User
-     */
-    public $user;
 
-    public $type;
-
-    public function __construct(User $user, string $type)
+    public function __construct(public User $user, public string $type)
     {
-        $this->user = $user;
-        $this->type = $type;
     }
 }

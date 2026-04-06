@@ -11,7 +11,9 @@
 
 namespace FoF\PwnedPasswords;
 
-use Flarum\Api\Serializer\UserSerializer;
+use Flarum\Api\Context;
+use Flarum\Api\Resource\UserResource;
+use Flarum\Api\Schema;
 use Flarum\Extend;
 use Flarum\User\Event\PasswordChanged;
 use Flarum\User\User;
@@ -37,10 +39,11 @@ return [
     (new Extend\Event())
         ->listen(PasswordChanged::class, UnmarkPassword::class),
 
-    (new Extend\ApiSerializer(UserSerializer::class))
-        ->attribute('hasPwnedPassword', function (UserSerializer $serializer, User $user) {
-            return $user->has_pwned_password;
-        }),
+    (new Extend\ApiResource(UserResource::class))
+        ->fields(fn () => [
+            Schema\Boolean::make('hasPwnedPassword')
+                ->visible(fn (User $user, Context $context) => $context->getActor()->id === $user->id || $context->getActor()->isAdmin())
+        ]),
 
     (new Extend\User())
         ->permissionGroups(Listeners\RevokeAccessWhenPasswordPwned::class),

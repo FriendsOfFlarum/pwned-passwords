@@ -27,20 +27,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PreventPwnedPassword implements MiddlewareInterface
 {
-    /**
-     * @var EventDispatcher
-     */
-    private $events;
-
-    /**
-     * @var TranslatorInterface
-     */
-    private $translator;
-
-    public function __construct(EventDispatcher $events, TranslatorInterface $translator)
+    public function __construct(protected EventDispatcher $events, protected TranslatorInterface $translator)
     {
-        $this->events = $events;
-        $this->translator = $translator;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

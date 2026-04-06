@@ -27,26 +27,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CheckLoginPassword implements MiddlewareInterface
 {
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    private $settings;
-
-    /**
-     * @var EventDispatcher
-     */
-    private $events;
-
-    /**
-     * @var Queue
-     */
-    private $queue;
-
-    public function __construct(SettingsRepositoryInterface $settings, EventDispatcher $events, Queue $queue)
+    public function __construct(protected SettingsRepositoryInterface $settings, protected EventDispatcher $events, protected Queue $queue)
     {
-        $this->settings = $settings;
-        $this->events = $events;
-        $this->queue = $queue;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -57,7 +39,7 @@ class CheckLoginPassword implements MiddlewareInterface
             return $response;
         }
 
-        if ($response->getStatusCode() !== 200 || !($response instanceof JsonResponse)) {
+        if (!($response instanceof JsonResponse) || $response->getStatusCode() !== 200) {
             return $response;
         }
 

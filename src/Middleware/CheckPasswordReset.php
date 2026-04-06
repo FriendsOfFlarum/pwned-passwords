@@ -26,20 +26,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CheckPasswordReset implements MiddlewareInterface
 {
-    /**
-     * @var UrlGenerator
-     */
-    private $url;
-
-    /**
-     * @var EventDispatcher
-     */
-    private $events;
-
-    public function __construct(UrlGenerator $url, EventDispatcher $events)
+    public function __construct(protected UrlGenerator $url, protected EventDispatcher $events)
     {
-        $this->url = $url;
-        $this->events = $events;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
