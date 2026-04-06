@@ -42,7 +42,7 @@ return [
     (new Extend\ApiResource(UserResource::class))
         ->fields(fn () => [
             Schema\Boolean::make('hasPwnedPassword')
-                ->visible(fn (User $user, Context $context) => $context->getActor()->id === $user->id || $context->getActor()->isAdmin())
+                ->visible(fn (User $user, Context $context) => $context->getActor()->id === $user->id || $context->getActor()->isAdmin()),
         ]),
 
     (new Extend\User())

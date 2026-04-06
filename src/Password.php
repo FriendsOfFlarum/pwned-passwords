@@ -11,7 +11,6 @@
 
 namespace FoF\PwnedPasswords;
 
-use Flarum\Foundation\Application;
 use Flarum\Foundation\Config;
 use GuzzleHttp\Client as Guzzle;
 use Throwable;
