@@ -5,13 +5,13 @@
     "prettier": "@flarum/prettier-config",
     "dependencies": {
         "@flarum/prettier-config": "^1.0",
-        "flarum-tsconfig": "^1.0",
-        "flarum-webpack-config": "^2.0",
-        "webpack": "^5.88.2",
-        "webpack-cli": "^5.1.4"
+        "flarum-tsconfig": "^2.0",
+        "flarum-webpack-config": "^3.0.3",
+        "webpack": "^5.105.4",
+        "webpack-cli": "^7.0.2"
     },
     "devDependencies": {
-        "prettier": "^3.0.3"
+        "prettier": "^3.8.1"
     },
     "scripts": {
         "dev": "webpack --mode development --watch",

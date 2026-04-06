@@ -3,7 +3,7 @@ import app from 'flarum/forum/app';
 import Component from 'flarum/common/Component';
 import Alert from 'flarum/common/components/Alert';
 import Button from 'flarum/common/components/Button';
-import icon from 'flarum/common/helpers/icon';
+import Icon from 'flarum/common/components/Icon';
 
 // Based on Flarum's forum/util/alertEmailConfirmation
 export default function alertPwnedPassword() {
@@ -23,7 +23,7 @@ export default function alertPwnedPassword() {
       return (
         <Button class="Button Button--link" onclick={this.onclick.bind(this)} loading={this.loading} disabled={this.sent}>
           {this.sent
-            ? [icon('fas fa-check'), ' ', app.translator.trans('fof-pwned-passwords.forum.alert.sent_message')]
+            ? [<Icon name="fas fa-check" />, ' ', app.translator.trans('fof-pwned-passwords.forum.alert.sent_message')]
             : app.translator.trans('fof-pwned-passwords.forum.alert.resend_button')}
         </Button>
       );
