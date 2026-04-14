@@ -11,14 +11,20 @@
 
 namespace FoF\PwnedPasswords;
 
-use Flarum\Api\Serializer\UserSerializer;
+use Flarum\Api\Context;
+use Flarum\Api\Resource\UserResource;
+use Flarum\Api\Schema;
 use Flarum\Extend;
 use Flarum\User\Event\PasswordChanged;
 use Flarum\User\User;
-use FoF\PwnedPasswords\Listeners\UnmarkPassword;
+use FoF\PwnedPasswords\Listeners\ClearPwnedPasswordFlag;
+use FoF\PwnedPasswords\Providers\PwnedPasswordServiceProvider;
 
 return [
     new Extend\Locales(__DIR__.'/locale'),
+
+    (new Extend\ServiceProvider())
+        ->register(PwnedPasswordServiceProvider::class),
 
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js'),
@@ -35,16 +41,21 @@ return [
         ->add(Middleware\CheckPasswordReset::class),
 
     (new Extend\Event())
-        ->listen(PasswordChanged::class, UnmarkPassword::class),
+        ->listen(PasswordChanged::class, ClearPwnedPasswordFlag::class),
 
-    (new Extend\ApiSerializer(UserSerializer::class))
-        ->attribute('hasPwnedPassword', function (UserSerializer $serializer, User $user) {
-            return $user->has_pwned_password;
-        }),
+    (new Extend\Settings())
+        ->default('fof-pwned-passwords.learnMoreUrl', 'https://haveibeenpwned.com/Passwords')
+        ->serializeToForum('fofPwnedPasswordsLearnMoreUrl', 'fof-pwned-passwords.learnMoreUrl'),
+
+    (new Extend\ApiResource(UserResource::class))
+        ->fields(fn () => [
+            Schema\Boolean::make('hasPwnedPassword')
+                ->visible(fn (User $user, Context $context) => $context->getActor()->id === $user->id || $context->getActor()->isAdmin()),
+        ]),
 
     (new Extend\User())
-        ->permissionGroups(Listeners\RevokeAccessWhenPasswordPwned::class),
+        ->permissionGroups(Listeners\PwnedPasswordPermissions::class),
 
     (new Extend\Policy())
-        ->globalPolicy(Access\GlobalPolicy::class),
+        ->globalPolicy(Access\PwnedPasswordPolicy::class),
 ];

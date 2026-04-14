@@ -9,13 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\PwnedPasswords\Events;
+use Flarum\Testing\integration\Setup\SetupScript;
 
-use Flarum\User\User;
+require __DIR__.'/../../vendor/autoload.php';
 
-class PwnedPasswordDetected
-{
-    public function __construct(public User $user, public string $type)
-    {
-    }
-}
+$setup = new SetupScript();
+
+$setup->run();

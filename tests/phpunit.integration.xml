@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd" colors="true" processIsolation="true" stopOnFailure="false">
+  <testsuites>
+    <testsuite name="FoF Pwned Passwords Integration Tests">
+      <directory suffix="Test.php">./integration</directory>
+      <exclude>./integration/tmp</exclude>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory suffix=".php">../src/</directory>
+    </include>
+  </source>
+</phpunit>

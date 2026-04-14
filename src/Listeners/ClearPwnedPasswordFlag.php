@@ -13,9 +13,9 @@ namespace FoF\PwnedPasswords\Listeners;
 
 use Flarum\User\Event\PasswordChanged;
 
-class UnmarkPassword
+class ClearPwnedPasswordFlag
 {
-    public function handle(PasswordChanged $event)
+    public function handle(PasswordChanged $event): void
     {
         $user = $event->user;
         $user->has_pwned_password = false;

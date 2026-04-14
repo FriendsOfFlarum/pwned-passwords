@@ -14,7 +14,7 @@ namespace FoF\PwnedPasswords\Listeners;
 use Flarum\Group\Group;
 use Flarum\User\User;
 
-class RevokeAccessWhenPasswordPwned
+class PwnedPasswordPermissions
 {
     public function __invoke(User $user, array $groupIds): array
     {

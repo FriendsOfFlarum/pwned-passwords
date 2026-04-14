@@ -15,7 +15,7 @@ use Flarum\Http\AccessToken;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Job\RequestPasswordResetJob;
 use FoF\PwnedPasswords\Events\PwnedPasswordDetected;
-use FoF\PwnedPasswords\Password;
+use FoF\PwnedPasswords\HibpClient;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Support\Arr;
@@ -27,26 +27,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CheckLoginPassword implements MiddlewareInterface
 {
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    private $settings;
-
-    /**
-     * @var EventDispatcher
-     */
-    private $events;
-
-    /**
-     * @var Queue
-     */
-    private $queue;
-
-    public function __construct(SettingsRepositoryInterface $settings, EventDispatcher $events, Queue $queue)
+    public function __construct(protected SettingsRepositoryInterface $settings, protected EventDispatcher $events, protected Queue $queue, protected HibpClient $password)
     {
-        $this->settings = $settings;
-        $this->events = $events;
-        $this->queue = $queue;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -57,7 +39,7 @@ class CheckLoginPassword implements MiddlewareInterface
             return $response;
         }
 
-        if ($response->getStatusCode() !== 200 || !($response instanceof JsonResponse)) {
+        if (!($response instanceof JsonResponse) || $response->getStatusCode() !== 200) {
             return $response;
         }
 
@@ -69,7 +51,7 @@ class CheckLoginPassword implements MiddlewareInterface
         $token = AccessToken::findValid(Arr::get($response->getPayload(), 'token'));
         $actor = $token->user;
 
-        if ($actor && !$actor->has_pwned_password && Arr::has($data, 'password') && Password::isPwned($data['password'])) {
+        if ($actor && !$actor->has_pwned_password && Arr::has($data, 'password') && $this->password->isPwned($data['password'])) {
             $this->queue->push(new RequestPasswordResetJob($actor->email));
             $actor->has_pwned_password = true;
             $actor->save();

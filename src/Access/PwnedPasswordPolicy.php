@@ -15,22 +15,18 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Access\AbstractPolicy;
 use Flarum\User\User;
 
-class GlobalPolicy extends AbstractPolicy
+class PwnedPasswordPolicy extends AbstractPolicy
 {
-    /**
-     * @var SettingsRepositoryInterface
-     */
-    protected $settings;
-
-    public function __construct(SettingsRepositoryInterface $settings)
+    public function __construct(protected SettingsRepositoryInterface $settings)
     {
-        $this->settings = $settings;
     }
 
-    public function can(User $actor)
+    public function can(User $actor): ?string
     {
-        if ($this->settings->get('fof-pwned-passwords.revokeAdminAccess') && $actor->has_pwned_password && $actor->isAdmin()) {
+        if ($actor->has_pwned_password && $this->settings->get('fof-pwned-passwords.revokeAdminAccess') && $actor->isAdmin()) {
             return $this->forceDeny();
         }
+
+        return null;
     }
 }
