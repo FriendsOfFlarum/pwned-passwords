@@ -11,14 +11,17 @@
 
 namespace FoF\PwnedPasswords\Listeners;
 
-use Flarum\User\Event\PasswordChanged;
+use Flarum\Group\Group;
+use Flarum\User\User;
 
-class UnmarkPassword
+class PwnedPasswordPermissions
 {
-    public function handle(PasswordChanged $event): void
+    public function __invoke(User $user, array $groupIds): array
     {
-        $user = $event->user;
-        $user->has_pwned_password = false;
-        $user->save();
+        if ($user->has_pwned_password) {
+            $groupIds = [Group::GUEST_ID];
+        }
+
+        return $groupIds;
     }
 }

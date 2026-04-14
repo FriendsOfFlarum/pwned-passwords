@@ -15,7 +15,7 @@ use Flarum\Http\AccessToken;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\User\Job\RequestPasswordResetJob;
 use FoF\PwnedPasswords\Events\PwnedPasswordDetected;
-use FoF\PwnedPasswords\Password;
+use FoF\PwnedPasswords\HibpClient;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Support\Arr;
@@ -27,7 +27,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CheckLoginPassword implements MiddlewareInterface
 {
-    public function __construct(protected SettingsRepositoryInterface $settings, protected EventDispatcher $events, protected Queue $queue)
+    public function __construct(protected SettingsRepositoryInterface $settings, protected EventDispatcher $events, protected Queue $queue, protected HibpClient $password)
     {
     }
 
@@ -51,7 +51,7 @@ class CheckLoginPassword implements MiddlewareInterface
         $token = AccessToken::findValid(Arr::get($response->getPayload(), 'token'));
         $actor = $token->user;
 
-        if ($actor && !$actor->has_pwned_password && Arr::has($data, 'password') && Password::isPwned($data['password'])) {
+        if ($actor && !$actor->has_pwned_password && Arr::has($data, 'password') && $this->password->isPwned($data['password'])) {
             $this->queue->push(new RequestPasswordResetJob($actor->email));
             $actor->has_pwned_password = true;
             $actor->save();

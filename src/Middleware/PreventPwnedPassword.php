@@ -16,7 +16,7 @@ use Flarum\Foundation\ErrorHandling\Registry;
 use Flarum\Foundation\ValidationException;
 use Flarum\Http\RequestUtil;
 use FoF\PwnedPasswords\Events\PwnedPasswordDetected;
-use FoF\PwnedPasswords\Password;
+use FoF\PwnedPasswords\HibpClient;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ResponseInterface;
@@ -27,7 +27,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PreventPwnedPassword implements MiddlewareInterface
 {
-    public function __construct(protected EventDispatcher $events, protected TranslatorInterface $translator)
+    public function __construct(protected EventDispatcher $events, protected TranslatorInterface $translator, protected HibpClient $password)
     {
     }
 
@@ -35,7 +35,7 @@ class PreventPwnedPassword implements MiddlewareInterface
     {
         $data = $request->getParsedBody();
 
-        if ($request->getAttribute('routeName') === 'register' && Arr::has($data, 'password') && Password::isPwned($data['password'])) {
+        if ($request->getAttribute('routeName') === 'register' && Arr::has($data, 'password') && $this->password->isPwned($data['password'])) {
             $actor = RequestUtil::getActor($request);
             $this->events->dispatch(new PwnedPasswordDetected($actor, 'registration'));
 

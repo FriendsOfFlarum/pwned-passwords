@@ -14,7 +14,7 @@ namespace FoF\PwnedPasswords\Middleware;
 use Flarum\Http\UrlGenerator;
 use Flarum\User\PasswordToken;
 use FoF\PwnedPasswords\Events\PwnedPasswordDetected;
-use FoF\PwnedPasswords\Password;
+use FoF\PwnedPasswords\HibpClient;
 use Illuminate\Contracts\Events\Dispatcher as EventDispatcher;
 use Illuminate\Support\Arr;
 use Illuminate\Support\MessageBag;
@@ -26,7 +26,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CheckPasswordReset implements MiddlewareInterface
 {
-    public function __construct(protected UrlGenerator $url, protected EventDispatcher $events)
+    public function __construct(protected UrlGenerator $url, protected EventDispatcher $events, protected HibpClient $password)
     {
     }
 
@@ -36,9 +36,9 @@ class CheckPasswordReset implements MiddlewareInterface
             $data = $request->getParsedBody();
             $token = PasswordToken::findOrFail(Arr::get($data, 'passwordToken'));
 
-            if (Arr::has($data, 'password') && Password::isPwned($data['password'])) {
+            if (Arr::has($data, 'password') && $this->password->isPwned($data['password'])) {
                 $translator = resolve('translator');
-                $request->getAttribute('session')->put('errors', new MessageBag([$translator->trans('fof-pwned-passwords.error')]));
+                $request->getAttribute('session')->put('errors', new MessageBag(['password' => [$translator->trans('fof-pwned-passwords.error')]]));
                 $this->events->dispatch(new PwnedPasswordDetected($token->user, 'passwordReset'));
 
                 return new RedirectResponse($this->url->to('forum')->route('resetPassword', ['token' => $token->token]));
