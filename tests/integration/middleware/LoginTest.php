@@ -62,7 +62,7 @@ class LoginTest extends TestCase
             $this->request('POST', '/login', [
                 'json' => [
                     'identification' => 'normal',
-                    'password' => 'secret',
+                    'password'       => 'secret',
                 ],
             ])
         );
@@ -84,7 +84,7 @@ class LoginTest extends TestCase
             $this->request('POST', '/login', [
                 'json' => [
                     'identification' => 'normal',
-                    'password' => 'secret',
+                    'password'       => 'secret',
                 ],
             ])
         );
@@ -109,7 +109,7 @@ class LoginTest extends TestCase
             $this->request('POST', '/login', [
                 'json' => [
                     'identification' => 'normal',
-                    'password' => 'secret',
+                    'password'       => 'secret',
                 ],
             ])
         );
@@ -133,7 +133,7 @@ class LoginTest extends TestCase
             $this->request('POST', '/login', [
                 'json' => [
                     'identification' => 'normal',
-                    'password' => 'secret',
+                    'password'       => 'secret',
                 ],
             ])
         );

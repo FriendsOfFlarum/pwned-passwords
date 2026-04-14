@@ -15,7 +15,6 @@ use Flarum\Group\Group;
 use Flarum\User\User;
 use FoF\PwnedPasswords\Listeners\PwnedPasswordPermissions;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PwnedPasswordPermissionsTest extends TestCase
@@ -30,7 +29,7 @@ class PwnedPasswordPermissionsTest extends TestCase
 
     private function makeUser(mixed $hasPwnedPassword): User
     {
-        $user = new class extends User {
+        $user = new class() extends User {
         };
         $user->has_pwned_password = $hasPwnedPassword;
 

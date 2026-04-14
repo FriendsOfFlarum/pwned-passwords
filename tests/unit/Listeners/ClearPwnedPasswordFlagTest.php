@@ -32,13 +32,14 @@ class ClearPwnedPasswordFlagTest extends TestCase
     {
         $saved = false;
 
-        $user = new class extends User {
+        $user = new class() extends User {
             public bool $has_pwned_password = true;
             public bool $savedCalled = false;
 
             public function save(array $options = []): bool
             {
                 $this->savedCalled = true;
+
                 return true;
             }
         };

@@ -47,7 +47,7 @@ class RegistrationTest extends TestCase
             $this->request('POST', '/register', [
                 'json' => [
                     'username' => 'newuser',
-                    'email' => 'newuser@example.com',
+                    'email'    => 'newuser@example.com',
                     'password' => 'password123',
                 ],
             ])
@@ -70,7 +70,7 @@ class RegistrationTest extends TestCase
             $this->request('POST', '/register', [
                 'json' => [
                     'username' => 'safeuser',
-                    'email' => 'safeuser@example.com',
+                    'email'    => 'safeuser@example.com',
                     'password' => 'un1que-and-s3cur3!',
                 ],
             ])
@@ -90,7 +90,7 @@ class RegistrationTest extends TestCase
             $this->request('POST', '/register', [
                 'json' => [
                     'username' => 'fallbackuser',
-                    'email' => 'fallbackuser@example.com',
+                    'email'    => 'fallbackuser@example.com',
                     'password' => 'some-password',
                 ],
             ])

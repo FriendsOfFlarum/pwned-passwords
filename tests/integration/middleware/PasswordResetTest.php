@@ -66,8 +66,8 @@ class PasswordResetTest extends TestCase
         $response = $this->send(
             $this->request('POST', '/savePassword', [
                 'json' => [
-                    'passwordToken' => $token->token,
-                    'password' => 'pwned-password',
+                    'passwordToken'         => $token->token,
+                    'password'              => 'pwned-password',
                     'password_confirmation' => 'pwned-password',
                 ],
             ])
@@ -88,8 +88,8 @@ class PasswordResetTest extends TestCase
         $response = $this->send(
             $this->request('POST', '/savePassword', [
                 'json' => [
-                    'passwordToken' => $token->token,
-                    'password' => 'clean-unique-password-99!',
+                    'passwordToken'         => $token->token,
+                    'password'              => 'clean-unique-password-99!',
                     'password_confirmation' => 'clean-unique-password-99!',
                 ],
             ])
