@@ -11,6 +11,7 @@
 
 namespace FoF\PwnedPasswords\Tests\integration\middleware;
 
+use Flarum\Extend\Csrf;
 use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
@@ -28,6 +29,10 @@ class LoginTest extends TestCase
         parent::setUp();
 
         $this->extension('fof-pwned-passwords');
+
+        $this->extend(
+            (new Csrf())->exemptRoute('login')
+        );
 
         $this->prepareDatabase([
             User::class => [
@@ -62,7 +67,7 @@ class LoginTest extends TestCase
             $this->request('POST', '/login', [
                 'json' => [
                     'identification' => 'normal',
-                    'password'       => 'secret',
+                    'password'       => 'too-obscure',
                 ],
             ])
         );
@@ -84,7 +89,7 @@ class LoginTest extends TestCase
             $this->request('POST', '/login', [
                 'json' => [
                     'identification' => 'normal',
-                    'password'       => 'secret',
+                    'password'       => 'too-obscure',
                 ],
             ])
         );
@@ -109,7 +114,7 @@ class LoginTest extends TestCase
             $this->request('POST', '/login', [
                 'json' => [
                     'identification' => 'normal',
-                    'password'       => 'secret',
+                    'password'       => 'too-obscure',
                 ],
             ])
         );
@@ -120,11 +125,11 @@ class LoginTest extends TestCase
     #[Test]
     public function already_flagged_user_is_not_rechecked_on_login(): void
     {
-        // Pre-flag the user
-        User::where('id', 2)->update(['has_pwned_password' => true]);
-
         $mock = $this->mockHibpClient(true);
         $this->enableLoginCheck();
+
+        // Pre-flag the user (after app is booted via mockHibpClient above)
+        User::where('id', 2)->update(['has_pwned_password' => true]);
 
         // Should not call isPwned again since has_pwned_password is already true
         $mock->expects($this->never())->method('isPwned');
@@ -133,7 +138,7 @@ class LoginTest extends TestCase
             $this->request('POST', '/login', [
                 'json' => [
                     'identification' => 'normal',
-                    'password'       => 'secret',
+                    'password'       => 'too-obscure',
                 ],
             ])
         );

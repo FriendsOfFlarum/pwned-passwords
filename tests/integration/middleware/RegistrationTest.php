@@ -11,6 +11,7 @@
 
 namespace FoF\PwnedPasswords\Tests\integration\middleware;
 
+use Flarum\Extend\Csrf;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use FoF\PwnedPasswords\HibpClient;
@@ -26,6 +27,10 @@ class RegistrationTest extends TestCase
         parent::setUp();
 
         $this->extension('fof-pwned-passwords');
+
+        $this->extend(
+            (new Csrf())->exemptRoute('register')
+        );
     }
 
     private function mockHibpClient(bool $isPwned): HibpClient&MockObject

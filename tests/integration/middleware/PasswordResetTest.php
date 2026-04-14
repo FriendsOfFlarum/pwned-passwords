@@ -12,6 +12,7 @@
 namespace FoF\PwnedPasswords\Tests\integration\middleware;
 
 use Carbon\Carbon;
+use Flarum\Extend\Csrf;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use Flarum\User\PasswordToken;
@@ -29,6 +30,10 @@ class PasswordResetTest extends TestCase
         parent::setUp();
 
         $this->extension('fof-pwned-passwords');
+
+        $this->extend(
+            (new Csrf())->exemptRoute('savePassword')
+        );
 
         $this->prepareDatabase([
             User::class => [
@@ -64,7 +69,7 @@ class PasswordResetTest extends TestCase
         $token = $this->createPasswordToken(2);
 
         $response = $this->send(
-            $this->request('POST', '/savePassword', [
+            $this->request('POST', '/reset', [
                 'json' => [
                     'passwordToken'         => $token->token,
                     'password'              => 'pwned-password',
@@ -75,7 +80,7 @@ class PasswordResetTest extends TestCase
 
         // Should redirect back to the reset form with an error
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertStringContainsString('resetPassword', $response->getHeaderLine('Location'));
+        $this->assertStringContainsString('/reset/', $response->getHeaderLine('Location'));
     }
 
     #[Test]
@@ -86,7 +91,7 @@ class PasswordResetTest extends TestCase
         $token = $this->createPasswordToken(2);
 
         $response = $this->send(
-            $this->request('POST', '/savePassword', [
+            $this->request('POST', '/reset', [
                 'json' => [
                     'passwordToken'         => $token->token,
                     'password'              => 'clean-unique-password-99!',
@@ -95,7 +100,9 @@ class PasswordResetTest extends TestCase
             ])
         );
 
-        $this->assertNotEquals(302, $response->getStatusCode());
+        // SavePasswordController always redirects; on success it goes to the forum base, not back to /reset/
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertStringNotContainsString('/reset/', $response->getHeaderLine('Location'));
 
         // Flag should be cleared
         $user = User::find(2);
